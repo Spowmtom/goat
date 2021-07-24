@@ -1,3 +1,4 @@
+#!/usr/bin/lisp --script
 ;;; goat.lisp --- Game Object Appliance Toolkit  -*- lexical-binding: t -*-
 
 ;; Maintainer:		Tohan Marchand <tohan.marchand@protonmail.com>
@@ -113,7 +114,7 @@ Supports dead range, both keys must be t to activate"
 
 (defun prompt-for-get-list ()
   (format t "~%*Mandatory~%Type nil to skip~2%")
-  (get-list (prompt-read "Amount of list")
+  (get-list (prompt-read "*Amount of lists" :type 'integer)
 	    (prompt-read "*List Length" :type 'integer)
 	    (prompt-read "Average")
 	    (prompt-read "Median")
@@ -132,7 +133,9 @@ Supports dead range, both keys must be t to activate"
 	    ((eql 2 answer) (research-list-proprieties))
 	    (t (format t "Please, enter a valid choice~%")))
       (if (not (y-or-n-p "Another Operation ?"))
-	  (return)))))
+	  (progn
+	    (format t "Byebye!~%")
+	    (return))))))
 
 
 (defun create-list-batch (&key list-amount length-limit average median smallest-int biggest-int smallest-dead-value biggest-dead-value metadata)
@@ -193,4 +196,7 @@ Supports dead range, both keys must be t to activate"
 
 (defun generate-list ()
   (apply #'dump-list (apply #'create-list-batch (prompt-for-get-list))))
+
+(prompt-menu)
+
 ;;;; goat.lisp ends here
